@@ -19,3 +19,16 @@ exports.generateToken = functions.database.ref('/users/{uid}')
         // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
         return snapshot.ref.child('chattoken').set(token);
     });
+
+exports.generateTokenOnClient = functions.https.onCall((uid, context) => {
+        console.log(uid);
+
+        const serverSideClient = new StreamChat('rc6yxksd5uam', 'w6vb5eaxyfh2acn88vct6h5x5zatqvzj4n5pkrqahr7f9p6mcdz5zgcwh53sq26s');
+        const generatedToken = serverSideClient.createToken(uid);
+        console.log(generatedToken);
+
+        // You must return a Promise when performing asynchronous tasks inside a Functions such as
+        // writing to the Firebase Realtime Database.
+        // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
+        return { token : generatedToken};
+        });
